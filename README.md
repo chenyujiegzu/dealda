@@ -3,14 +3,14 @@
 Coordinate Transformation Script   
 This project provides a Python script to convert station ITRF (International Terrestrial Reference Frame) coordinates to ICRF (International Celestial Reference Frame) coordinates. The transformation process considers various Earth motions, including Earth rotation, polar motion, nutation, and precession, to obtain precise ICRF coordinates.
 
-Table of Contents：  
-Project Structure  
-Installation  
-Usage  
-Examples  
-Details of the Transformation Process  
+## Table of Contents  
+1. [Project Structure](#project-structure)  
+2. [Installation](#installation)  
+3. [Usage](#usage)  
+4. [Example](#example)  
+5. [Details of the Transformation Process](#details-of-the-transformation-process)  
 
-Project Structure  
+## Project Structure  
 The project is modularized into the following files:  
 args_parser.py: Handles command-line argument parsing.  
 coordtf.py: Main script that orchestrates the coordinate transformation.  
@@ -18,16 +18,16 @@ transform_effect.py: Contains functions related to specific transformation effec
 transform_epoch.py: Contains functions to compute angles and parameters for nutation and precession based on the epoch.  
 utils.py: Utility functions such as downloading and parsing IERS data, converting coordinates, etc.  
 
-Installation  
-git clone   
-cd   
+## Installation  
+git clone https://github.com/cyj-hue/coordtf.git   
+cd /path/coordrf   
 pip install numpy  
 
-Usage  
+## Usage  
 To run the script, use the following command:  
 python coordtf.py --ra <RA> --dec <Dec> --lon <Longitude> --lat <Latitude> --alt <Altitude> --epoch <Epoch> --format <Format>  
 
-Parameters:  
+## Parameters:  
 --ra: Right Ascension of the source.  
 --dec: Declination of the source.  
 --lon: Longitude of the observation station.  
@@ -36,9 +36,10 @@ Parameters:
 --epoch: Observation epoch in YYYY-MM-DDTHH:MM:SS.SSS format.  
 --format: Input format of RA and Dec (degrees or sexagesimal).  
 
-Example: python coordtf.py --ra "14:15:39.7" --dec "-60:50:02" --lon 21.443 --lat 37.983 --alt 100 --epoch "2024-07-30T12:00:00.000" --format sexagesimal  
+## Example:  
+python coordtf.py --ra "14:15:39.7" --dec "-60:50:02" --lon 21.443 --lat 37.983 --alt 100 --epoch "2024-07-30T12:00:00.000" --format sexagesimal  
 
-Details of the Transformation Process  
+## Details of the Transformation Process  
 1.Earth Rotation:  
 The Earth rotation angle is computed based on the Local Sidereal Time (LST), and the Earth rotation matrix is applied to convert ITRF coordinates to geocentric coordinates.  
 
