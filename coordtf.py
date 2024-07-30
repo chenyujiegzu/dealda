@@ -1,4 +1,3 @@
-import argparse
 import numpy as np
 from datetime import datetime
 from args_parser import parse_args
