@@ -40,16 +40,17 @@ python coordtf.py --ra <RA> --dec <Dec> --lon <Longitude> --lat <Latitude> --alt
 python coordtf.py --ra "14:15:39.7" --dec "-60:50:02" --lon 21.443 --lat 37.983 --alt 100 --epoch "2024-07-30T12:00:00.000" --format sexagesimal  
 
 ## Details of the Transformation Process  
-1.Earth Rotation:  
+1.**Earth Rotation**:  
 The Earth rotation angle is computed based on the Local Sidereal Time (LST), and the Earth rotation matrix is applied to convert ITRF coordinates to geocentric coordinates.  
 
-2.Polar Motion:  
+2.**Polar Motion**:  
 Polar motion parameters (x_p and y_p) are obtained from IERS data. Linear interpolation is used to obtain accurate polar motion parameters.  
 
-3.Nutation:  
+3.**Nutation**:  
 Nutation angles (delta_psi and delta_epsilon) are calculated, and the nutation matrix is applied to correct short-term changes in the Earth's rotation axis.  
 
-4.Precession:  
+4.**Precession**:  
 Precession angles (zeta, z, and theta) are calculated, and the precession matrix is applied to correct long-term changes in the Earth's rotation axis.  
-5.Combining All Transformation Matrices:  
+
+5.**Combining All Transformation Matrices**:  
 All the above rotation matrices are multiplied to obtain the total transformation matrix R_total, which is then applied to the initial ITRF coordinates to obtain the final ICRF coordinates.  
