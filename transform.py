@@ -1,6 +1,7 @@
 import numpy as np
 from datetime import datetime
 
+# functions for computing angles
 def compute_precession_angles(epoch):
     # Calculate number of Julian centuries since J2000.0
     T = (epoch - datetime(2000, 1, 1, 12)).total_seconds() / 86400.0 / 36525.0
