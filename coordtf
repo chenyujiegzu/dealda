@@ -1,0 +1,35 @@
+import argparse
+import numpy as np
+from datetime import datetime
+from transform import apply_transformations
+from utils import download_iers_file, parse_iers_data
+
+def main():
+    parser = argparse.ArgumentParser(description="Calculate light path delay for multiple stations.")
+    parser.add_argument('--lat', type=float, required=True, help='Latitude of the station in degrees.')
+    parser.add_argument('--lon', type=float, required=True, help='Longitude of the station in degrees.')
+    parser.add_argument('--alt', type=float, default=0, help='Altitude of the station in meters.')
+    parser.add_argument('--epoch', type=str, required=True, help='Epoch time in YYYY-MM-DDTHH:MM:SS format.')
+    parser.add_argument('--lst', type=float, required=True, help='Local Sidereal Time in degrees.')
+    parser.add_argument('--iers-url', type=str, required=True, help='URL of the IERS Bulletin A file.')
+
+    args = parser.parse_args()
+
+    # Parse the epoch time
+    epoch = datetime.strptime(args.epoch, "%Y-%m-%dT%H:%M:%S")
+    
+    # Download and parse IERS data
+    iers_data_text = download_iers_file(args.iers_url)
+    iers_data = parse_iers_data(iers_data_text)
+    
+    # Convert latitude, longitude, and altitude to ITRS coordinates
+    # This is a placeholder for the actual coordinate transformation
+    ITRS = np.array([args.lon, args.lat, args.alt])
+    
+    # Apply transformations
+    transformed_coords = apply_transformations(ITRS, args.lst, epoch, iers_data)
+    
+    print(f"Transformed coordinates: {transformed_coords}")
+
+if __name__ == "__main__":
+    main()
