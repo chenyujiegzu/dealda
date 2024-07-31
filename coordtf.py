@@ -28,13 +28,13 @@ def main():
     if not iers_data:
         raise ValueError("Failed to parse IERS data")
         
-    # Apply transformations to get the final coordinates in CRS
+    # Apply transformations to get the coordinates in ITRS
     transformed_coordinates = apply_transformations(initial_ITRS, lst, epoch, iers_data)
-    print("Transformed coordinates:", transformed_coordinates)
+    print("Transformed coordinates in ICRS:", transformed_coordinates)
  
     # Normalize the transformed coordinates to get the unit vector
     unit_vector = transformed_coordinates / np.linalg.norm(transformed_coordinates)
-    print("Transformed unit vector coordinates:", unit_vector)
+    print("Transformed unit vector coordinates in ICRS:", unit_vector)
 
 if __name__ == "__main__":
     main()
