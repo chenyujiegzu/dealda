@@ -63,4 +63,3 @@ def get_polar_motion_angles(epoch, iers_data):
     y_p = np.deg2rad(y_p / 3600.0)
     
     return x_p, y_p
-
