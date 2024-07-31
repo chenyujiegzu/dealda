@@ -100,4 +100,3 @@ def apply_transformations(ITRS, lst, epoch, iers_data):
     # Apply the combined transformation to the ITRS coordinates
     transformed_coords = np.dot(R_total, ITRS)
     return transformed_coords
-
