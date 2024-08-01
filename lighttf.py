@@ -2,7 +2,7 @@ from datetime import datetime
 from args_parser import parse_args
 from light_travel_time_diff import calculate_light_travel_time
 from utils import download_iers_file, parse_iers_data
-from transform_epoch import datetime_to_mjd, lst_from_utc, lon_lat_alt_to_ITRS
+from transform_epoch import datetime_to_mjd, lst_from_utc, lon_lat_alt_to_ITRS, convert_to_degrees
 
 def main():
     # Parse command line arguments
@@ -43,23 +43,29 @@ def main():
     if not iers_data:
         raise ValueError("Failed to parse IERS data")
 
+    # Convert RA and Dec from sexagesimal to decimal
+    ra_decimal, dec_decimal = convert_to_degrees(args.ra, args.dec)
+
     # Calculate light travel time differences using the parsed arguments
-    time_diffs, distance_diffs = calculate_light_travel_time(
+    time_diffs, locations, source_vector = calculate_light_travel_time(
         stations=stations, 
-        ra=args.ra, 
-        dec=args.dec, 
+        ra=ra_decimal, 
+        dec=dec_decimal, 
         epoch=epoch,
         iers_data=iers_data,  # Pass IERS data for transformation
         lst=lst
     )
-    
-    # Print the detailed time differences
+
     for station_pair, time_diff in time_diffs.items():
         station1, station2 = station_pair.split('-')
-        distance_diff = distance_diffs[station_pair]
+        unit_vector1 = locations[station1]
+        unit_vector2 = locations[station2]
         print(f"Between stations {station1} and {station2}:")
-        print(f"  Light travel time difference: {time_diff:.12f} seconds")
-        print(f"  Distance difference in ICRS: {distance_diff:.12f} meters")
+        print(f"  Source unit vector in ICRS: {source_vector}")
+        print(f"  Station {station1} unit vector (ITRS): {unit_vector1}")
+        print(f"  Station {station2} unit vector (ITRS): {unit_vector2}")
+        print(f"  Light travel distance difference: {time_diff:.12f} m")
 
 if __name__ == "__main__":
     main()
+
