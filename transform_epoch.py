@@ -40,16 +40,24 @@ def lon_lat_alt_to_ITRS(lon, lat, alt):
     # Take the obtained xyz as an array.
     return np.array([x, y, z])
 
-def convert_to_degrees(ra, dec, ra_format, dec_format):
-    if (ra_format == 'sexagesimal'):
-        ra_deg = 15 * (ra[0] + ra[1] / 60.0 + ra[2] / 3600.0)
-    else:
-        ra_deg = ra[0]
-    
-    if dec_format == 'sexagesimal':
-        sign = 1 if dec[0] >= 0 else -1
-        dec_deg = sign * (abs(dec[0]) + dec[1] / 60.0 + dec[2] / 3600.0)
-    else:
-        dec_deg = dec[0]
+def convert_to_degrees(ra, dec):
+    def sexagesimal_to_decimal(sexagesimal, is_ra):
+        parts = sexagesimal.split(':')
+        if len(parts) == 3:
+            hours_or_degrees = float(parts[0])
+            minutes = float(parts[1])
+            seconds = float(parts[2])
+            if is_ra:
+                return 15 * (hours_or_degrees + minutes / 60 + seconds / 3600)
+            else:
+                sign = 1 if hours_or_degrees >= 0 else -1
+                return sign * (abs(hours_or_degrees) + minutes / 60 + seconds / 3600)
+        else:
+            raise ValueError("Invalid sexagesimal format")
+
+    ra_deg = sexagesimal_to_decimal(ra, is_ra=True)
+    dec_deg = sexagesimal_to_decimal(dec, is_ra=False)
     
     return ra_deg, dec_deg
+
+
