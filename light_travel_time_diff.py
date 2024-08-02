@@ -61,7 +61,7 @@ def calculate_light_travel_time(stations, ra, dec, epoch, iers_data, lst):
  
                 # Calculate the distance difference
                 distance_diff = np.linalg.norm(proj2) - np.linalg.norm(proj1)
-                # Calculate the light travel time difference in seconds
+                # Calculate the light travel time difference
                 light_travel_time_diff = distance_diff
                 
                 station_pair_key = f"{station1['name']}-{station2['name']}"
