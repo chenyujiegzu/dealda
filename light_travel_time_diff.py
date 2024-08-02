@@ -33,35 +33,33 @@ def calculate_light_travel_time(stations, ra, dec, epoch, iers_data, lst):
         if station1['name'] not in locations:
             loc1 = lon_lat_alt_to_ITRS(station1['lon'], station1['lat'], station1['alt'])
             loc1 = apply_transformations(loc1, lst, epoch, iers_data)
-            unit_vector1 = loc1 / np.linalg.norm(loc1)
-            locations[station1['name']] = unit_vector1
-            print(f"Station {station1['name']} unit vector (ITRS): {unit_vector1}")
+            locations[station1['name']] = loc1
+            print(f"Station {station1['name']} vector (ITRS): {loc1}")
         
         for j, station2 in enumerate(stations):
             if i < j:
                 if station2['name'] not in locations:
                     loc2 = lon_lat_alt_to_ITRS(station2['lon'], station2['lat'], station2['alt'])
                     loc2 = apply_transformations(loc2, lst, epoch, iers_data)
-                    unit_vector2 = loc2 / np.linalg.norm(loc2)
-                    locations[station2['name']] = unit_vector2
-                    print(f"Station {station2['name']} unit vector (ITRS): {unit_vector2}")
+                    locations[station2['name']] = loc2
+                    print(f"Station {station2['name']} vector (ITRS): {loc2}")
                 
-                unit_vector1 = locations[station1['name']]
-                unit_vector2 = locations[station2['name']]
+                loc1 = locations[station1['name']]
+                loc2 = locations[station2['name']]
                
                 # Calculate the projection of the station unit vectors onto the source vector
-                proj1 = np.dot(unit_vector1, source_vector) * source_vector
-                proj2 = np.dot(unit_vector2, source_vector) * source_vector
+                proj1 = np.dot(loc1, source_vector) * source_vector
+                proj2 = np.dot(loc2, source_vector) * source_vector
                
                 proj1_norm = np.linalg.norm(proj1)
                 proj2_norm = np.linalg.norm(proj2)
                 
-                print(f"Projection of station {station1['name']} unit vector onto source unit vector: {proj1_norm}")
-                print(f"Projection of station {station2['name']} unit vector onto source unit vector: {proj2_norm}")
+                print(f"Projection of station {station1['name']} vector onto source unit vector: {proj1_norm}")
+                print(f"Projection of station {station2['name']} vector onto source unit vector: {proj2_norm}")
  
                 # Calculate the distance difference
                 distance_diff = np.linalg.norm(proj2) - np.linalg.norm(proj1)
-                # Calculate the light travel time difference
+                # Calculate the light travel time difference in seconds
                 light_travel_time_diff = distance_diff
                 
                 station_pair_key = f"{station1['name']}-{station2['name']}"
