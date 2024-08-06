@@ -47,19 +47,16 @@ def calculate_light_travel_time(stations, ra, dec, epoch, iers_data, lst):
                 loc1 = locations[station1['name']]
                 loc2 = locations[station2['name']]
                
-                # Calculate the projection of the station unit vectors onto the source vector
-                proj1 = np.dot(loc1, source_vector) * source_vector
-                proj2 = np.dot(loc2, source_vector) * source_vector
+                # Calculate the projection length of the station vectors onto the source vector
+                proj1_length = np.dot(loc1, source_vector)
+                proj2_length = np.dot(loc2, source_vector)
                
-                proj1_norm = np.linalg.norm(proj1)
-                proj2_norm = np.linalg.norm(proj2)
-                
-                print(f"Projection of station {station1['name']} vector onto source unit vector: {proj1_norm}")
-                print(f"Projection of station {station2['name']} vector onto source unit vector: {proj2_norm}")
+                print(f"Projection length of station {station1['name']} vector onto source unit vector: {proj1_length}")
+                print(f"Projection length of station {station2['name']} vector onto source unit vector: {proj2_length}")
  
-                # Calculate the distance difference
-                distance_diff = np.linalg.norm(proj2) - np.linalg.norm(proj1)
-                # Calculate the light travel time difference in seconds
+                # Calculate the distance difference (light travel time difference)
+                distance_diff = np.abs(proj2_length - proj1_length)
+                # Calculate the light travel time difference in seconds (considering speed of light)
                 light_travel_time_diff = distance_diff
                 
                 station_pair_key = f"{station1['name']}-{station2['name']}"
