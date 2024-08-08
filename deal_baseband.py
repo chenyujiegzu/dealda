@@ -20,7 +20,7 @@ def process_block(start, end, in1, in2, out, chunk_size):
         out[2*i*chunk_size:(2*i+1)*chunk_size] = in1[i*chunk_size:(i+1)*chunk_size]
         out[(2*i+1)*chunk_size:(2*i+2)*chunk_size] = in2[i*chunk_size:(i+1)*chunk_size]
 
-def parallel_memory_map_merge(file1, file2, outfile, parallels=4):
+def parallel_memory_map_combine(file1, file2, outfile, parallels=4):
     in1 = memory_map_read(file1)
     in2 = memory_map_read(file2)
 
@@ -47,7 +47,7 @@ def parallel_memory_map_merge(file1, file2, outfile, parallels=4):
     in2.close()
     out.close()
 
-def process_merged_data(outfile, result_file, plot_file):
+def process_combined_data(outfile, result_file, plot_file):
     with open(outfile, 'rb') as f:
         fmap = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)
 
@@ -87,11 +87,11 @@ def process_merged_data(outfile, result_file, plot_file):
 def main():
     args = parse_args_deal_baseband()
 
-    # Merge the baseband data files
+    # Combine the baseband data files
     parallel_memory_map_merge(args.file1, args.file2, args.o, parallels=args.t)
 
-    # Process the merged baseband data
-    process_merged_data(args.o, 'frequency_spectrum.txt', 'spectrum_plot.png')
+    # Process the combined baseband data
+    process_combined_data(args.o, 'frequency_spectrum.txt', 'spectrum_plot.png')
 
 if __name__ == "__main__":
     main()
