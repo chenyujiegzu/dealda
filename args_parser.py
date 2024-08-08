@@ -45,11 +45,11 @@ def parse_args_lighttf():
     return parser.parse_args()
 
 def parse_args_deal_baseband():
-    parser = argparse.ArgumentParser(description="Merge and process baseband data files.")
+    parser = argparse.ArgumentParser(description="Read and combine baseband data files.")
     parser.add_argument('file1', type=str, help="Path to the first baseband data file.")
     parser.add_argument('file2', type=str, help="Path to the second baseband data file.")
-    parser.add_argument('outfile', type=str, help="Path to the output merged data file.")
-    parser.add_argument('--num_workers', type=int, default=4, help="Number of workers for parallel processing (default: 4).")
+    parser.add_argument('-o', type=str, required=True, help="Path to the output merged data file.")
+    parser.add_argument('-t', type=int, default=4, help="Numbers of parallel processing (default: 4).")
     return parser.parse_args()
 
 def parse_args():
