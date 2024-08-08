@@ -3,6 +3,7 @@ import mmap
 import os
 import multiprocessing as mp
 import matplotlib.pyplot as plt
+import argparse
 
 def memory_map_read(filename, access=mmap.ACCESS_READ):
     size = os.path.getsize(filename)
@@ -74,10 +75,8 @@ def process_baseband_data(file):
     plt.xlabel('MHz')
     plt.show()
 
-# Main execution
-file1 = 'bb1/UDP_0001.dat'
-file2 = 'bb2/UDP_0001.dat'
-outfile = 'combine_bb1_bb2.dat'
+def main():
+    args = parser.parse_args()
 
 # Merge the baseband data files
 parallel_memory_map_merge(file1, file2, outfile)
@@ -85,3 +84,5 @@ parallel_memory_map_merge(file1, file2, outfile)
 # Process the merged baseband data
 process_baseband_data(outfile)
 
+if __name__ == "__main__":
+    main()
