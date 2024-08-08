@@ -26,7 +26,7 @@ def parallel_memory_map_combine(file1, file2, outfile, parallels=4):
 
     size = len(in1) * 2
     chunk_size = 4096
-    blocksize = size // (chunk_size * 2)
+    block_size = size // (chunk_size * 2)
 
     with open(outfile, 'wb') as f:
         f.seek(size - 1)
@@ -35,7 +35,7 @@ def parallel_memory_map_combine(file1, file2, outfile, parallels=4):
     out = memory_map_write(outfile)
 
     pool = mp.Pool(parallels)
-    block_ranges = [(i * (blocksize // parallels), (i + 1) * (blocksize // parallels)) for i in range(parallels)]
+    block_ranges = [(i * (block_size // parallels), (i + 1) * (block_size // parallels)) for i in range(parallels)]
     
     for start, end in block_ranges:
         pool.apply_async(process_block, args=(start, end, in1, in2, out, chunk_size))
@@ -88,11 +88,10 @@ def main():
     args = parse_args_deal_baseband()
 
     # Combine the baseband data files
-    parallel_memory_map_merge(args.file1, args.file2, args.o, parallels=args.t)
+    parallel_memory_map_combine(args.file1, args.file2, args.o, parallels=args.t)
 
     # Process the combined baseband data
     process_combined_data(args.o, 'frequency_spectrum.txt', 'spectrum_plot.png')
 
 if __name__ == "__main__":
     main()
-
