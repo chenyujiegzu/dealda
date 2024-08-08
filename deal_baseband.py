@@ -2,7 +2,7 @@ import os
 import mmap
 import numpy as np
 import multiprocessing as mp
-import matplotlib.pyplot as plt
+from tqdm import tqdm
 from args_parser import parse_args_deal_baseband
 
 def memory_map_read(filename, access=mmap.ACCESS_READ):
@@ -36,9 +36,12 @@ def parallel_memory_map_combine(file1, file2, outfile, parallels=4):
 
     pool = mp.Pool(parallels)
     block_ranges = [(i * (block_size // parallels), (i + 1) * (block_size // parallels)) for i in range(parallels)]
-    
-    for start, end in block_ranges:
-        pool.apply_async(process_block, args=(start, end, in1, in2, out, chunk_size))
+
+    # Wrap the apply_async calls in tqdm for progress tracking
+    tasks = [pool.apply_async(process_block, args=(start, end, in1, in2, out, chunk_size)) for start, end in block_ranges]
+
+    for task in tqdm(tasks, desc="Processing blocks", unit="block"):
+        task.wait()
 
     pool.close()
     pool.join()
@@ -95,3 +98,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
