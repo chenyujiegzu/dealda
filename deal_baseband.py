@@ -76,10 +76,10 @@ def process_baseband_data(file):
     plt.show()
 
 def main():
-    args = parser.parse_args()
+    args = parser.parse_args_deal_baseband()
 
 # Merge the baseband data files
-parallel_memory_map_merge(file1, file2, outfile)
+parallel_memory_map_merge(args.file1, args.file2, args.outfile, num_workers=args.num_workers)
 
 # Process the merged baseband data
 process_baseband_data(outfile)
