@@ -1,9 +1,9 @@
-import multiprocessing as mp
-import numpy as np
-import mmap
 import os
-from args_parser import parse_args_deal_baseband
+import mmap
+import numpy as np
+import multiprocessing as mp
 import matplotlib.pyplot as plt
+from args_parser import parse_args_deal_baseband
 
 def memory_map_read(filename, access=mmap.ACCESS_READ):
     size = os.path.getsize(filename)
