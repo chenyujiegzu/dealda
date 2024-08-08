@@ -43,12 +43,22 @@ def parse_args_lighttf():
     parser.add_argument('--stations', required=True, nargs='+', type=parse_station,
                         help="Observation stations in the format name:lon lat alt (e.g., FAST:106.8561 25.6500 1065).")
     return parser.parse_args()
-    
+
+def parse_args_deal_baseband():
+    parser = argparse.ArgumentParser(description="Merge and process baseband data files.")
+    parser.add_argument('file1', type=str, help="Path to the first baseband data file.")
+    parser.add_argument('file2', type=str, help="Path to the second baseband data file.")
+    parser.add_argument('outfile', type=str, help="Path to the output merged data file.")
+    parser.add_argument('--num_workers', type=int, default=4, help="Number of workers for parallel processing (default: 4).")
+    return parser.parse_args()
+
 def parse_args():
     script_name = sys.argv[0]
     if 'coordtf.py' in script_name:
         return parse_args_coordtf()
     elif 'lighttf.py' in script_name:
         return parse_args_lighttf()
+    elif 'deal_baseband.py' in script_name:
+        return parse_args_deal_baseband()
     else:
-        raise RuntimeError("Unknown script. Please run coordtf.py or lighttf.py.")
+        raise RuntimeError("Unknown script. Please run coordtf.py, lighttf.py, or deal_baseband.py.")
