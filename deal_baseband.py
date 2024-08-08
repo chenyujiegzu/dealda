@@ -1,13 +1,13 @@
+import multiprocessing as mp
 import numpy as np
 import mmap
 import os
-import multiprocessing as mp
+from args_parser import parse_args_deal_baseband
 import matplotlib.pyplot as plt
-import argparse
 
 def memory_map_read(filename, access=mmap.ACCESS_READ):
     size = os.path.getsize(filename)
-    fd = os.open(filename, os.O_RDWR)
+    fd = os.open(filename, os.O_RDONLY)
     return mmap.mmap(fd, size, access=access)
 
 def memory_map_write(filename, access=mmap.ACCESS_WRITE):
@@ -20,7 +20,7 @@ def process_block(start, end, in1, in2, out, chunk_size):
         out[2*i*chunk_size:(2*i+1)*chunk_size] = in1[i*chunk_size:(i+1)*chunk_size]
         out[(2*i+1)*chunk_size:(2*i+2)*chunk_size] = in2[i*chunk_size:(i+1)*chunk_size]
 
-def parallel_memory_map_merge(file1, file2, outfile, num_workers=4):
+def parallel_memory_map_merge(file1, file2, outfile, parallels=4):
     in1 = memory_map_read(file1)
     in2 = memory_map_read(file2)
 
@@ -34,8 +34,8 @@ def parallel_memory_map_merge(file1, file2, outfile, num_workers=4):
 
     out = memory_map_write(outfile)
 
-    pool = mp.Pool(num_workers)
-    block_ranges = [(i * (blocksize // num_workers), (i + 1) * (blocksize // num_workers)) for i in range(num_workers)]
+    pool = mp.Pool(parallels)
+    block_ranges = [(i * (blocksize // parallels), (i + 1) * (blocksize // parallels)) for i in range(parallels)]
     
     for start, end in block_ranges:
         pool.apply_async(process_block, args=(start, end, in1, in2, out, chunk_size))
@@ -47,15 +47,15 @@ def parallel_memory_map_merge(file1, file2, outfile, num_workers=4):
     in2.close()
     out.close()
 
-def process_baseband_data(file):
-    with open(file, 'r+b') as f:
-        fmap = memory_map_read(file)
+def process_merged_data(outfile, result_file, plot_file):
+    with open(outfile, 'rb') as f:
+        fmap = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)
 
     onek = 1024
     nchan = 4 * onek
     nsample = 1000
 
-    delta_t = 1.0 / 1.6 * 1.0e-9  # 1/1.6 ns
+    delta_t = 1.0 / 1.6 * 1.0e-9
     bw = 1.0 / (2 * np.pi * delta_t)
     bw = 4 * bw
 
@@ -68,21 +68,31 @@ def process_baseband_data(file):
         tseries = np.ndarray(2 * nchan, np.int8, fmap[ispec * 2 * nchan:(ispec + 1) * 2 * nchan])
         subtseries = tseries
         tempspec = np.fft.fft(subtseries)
-        avspec += np.abs(tempspec[0:nchan]) * 1.0 / nsample
 
+        avspec = avspec + np.abs(tempspec[0:nchan]) * 1.0 / nsample
+
+    # Save the frequency spectrum to a text file
+    np.savetxt(result_file, np.column_stack((freq, avspec)), header="Frequency (MHz)  Amplitude", comments='')
+
+    # Plot and save the spectrum as an image file
+    plt.figure()
     plt.plot(freq[0:nchan], avspec)
     plt.yscale('log')
     plt.xlabel('MHz')
-    plt.show()
+    plt.ylabel('Amplitude')
+    plt.title('Frequency Spectrum')
+    plt.savefig(plot_file)
+    plt.close()
 
 def main():
-    args = parser.parse_args_deal_baseband()
+    args = parse_args_deal_baseband()
 
-# Merge the baseband data files
-parallel_memory_map_merge(args.file1, args.file2, args.outfile, num_workers=args.num_workers)
+    # Merge the baseband data files
+    parallel_memory_map_merge(args.file1, args.file2, args.o, parallels=args.t)
 
-# Process the merged baseband data
-process_baseband_data(outfile)
+    # Process the merged baseband data
+    process_merged_data(args.o, 'frequency_spectrum.txt', 'spectrum_plot.png')
 
 if __name__ == "__main__":
     main()
+
