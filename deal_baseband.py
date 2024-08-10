@@ -17,33 +17,31 @@ def memory_map_write(filename, size, access=mmap.ACCESS_WRITE):
     fd = os.open(filename, os.O_RDWR)
     return mmap.mmap(fd, size, access=access)
 
-def process_chunk(file1, file2, out_file, start, chunk_size):
-    in1 = memory_map_read(file1)[0]
-    in2 = memory_map_read(file2)[0]
-    
-    with open(out_file, 'r+b') as out:
-        out.seek(2 * start)
-        out.write(in1[start:start + chunk_size])
-        out.write(in2[start:start + chunk_size])
-
-    in1.close()
-    in2.close()
+def process_chunk(in1, in2, out, start, chunk_size):
+    out[2 * start:2 * start + chunk_size] = in1[start:start + chunk_size]
+    out[2 * start + chunk_size:2 * (start + chunk_size)] = in2[start:start + chunk_size]
 
 def combine_baseband(file1, file2, outfile, chunk_size, num_processes):
-    size = os.path.getsize(file1)
+    in1, size1 = memory_map_read(file1)
+    in2, size2 = memory_map_read(file2)
+    size = size1  # Assume both files have the same size
 
     # Create empty output file
-    memory_map_write(outfile, 2 * size)
+    out = memory_map_write(outfile, 2 * size)
 
     processes = []
     for i in tqdm(range(0, size, chunk_size), desc="Processing", unit="blocks"):
         start = i
-        p = Process(target=process_chunk, args=(file1, file2, outfile, start, chunk_size))
+        p = Process(target=process_chunk, args=(in1, in2, out, start, chunk_size))
         processes.append(p)
         p.start()
 
     for p in processes:
         p.join()
+
+    in1.close()
+    in2.close()
+    out.close()
 
 def main():
     args = parse_args_deal_baseband()
@@ -60,4 +58,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
