@@ -1,7 +1,6 @@
 import numpy as np
 import mmap
 import matplotlib.pyplot as plt
-import sys
 
 # Set file path and parameters
 file = 'test.dat'
@@ -28,20 +27,29 @@ for ispec in range(nsample):
     # Read data from memory map
     start_idx = ispec * 2 * nchan
     end_idx = start_idx + 2 * nchan
-    tseries = np.frombuffer(fmap[start_idx:end_idx], dtype=np.int8)
+    tseries = np.frombuffer(fmap[start_idx:end_idx], dtype=np.int8).astype(np.float32)
+
+    # Apply a window function (e.g., Hanning window)
+    window = np.hanning(len(tseries))
+    tseries *= window
 
     # Compute the FFT of the time series
-    subtseries = tseries
-    tempspec = np.fft.fft(subtseries)
+    tempspec = np.fft.fft(tseries)
+    
+    # Compute the magnitude spectrum
     avspec += np.abs(tempspec[:nchan]) * 1.0 / nsample
 
 # Close the memory map
 fmap.close()
+
+# Ensure no zero values for log scaling
+avspec = np.maximum(avspec, 1e-10)
 
 # Plot the average spectrum
 plt.plot(freq, avspec)
 plt.yscale('log')
 plt.xlabel('Frequency (MHz)')
 plt.ylabel('Amplitude')
-plt.title('Average Spectrum')
+plt.title('Average Amplitude Spectrum')
 plt.show()
+
