@@ -60,7 +60,7 @@ def plot_data(freq_phase, output_file):
     top_ax.plot(phase, flux_phase)
     top_ax.set_ylabel('Flux Density')
     top_ax.set_xlabel('Pulse Phase')
-    top_ax.set_ylim([-0.3, 1])  # Set the y-axis limit for the top plot
+    top_ax.set_ylim([-0.5, 5])  # Set the y-axis limit for the top plot
     top_ax.set_xlim([0, 1])
     top_ax.xaxis.set_visible(False)
     
