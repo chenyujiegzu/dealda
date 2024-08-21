@@ -62,6 +62,7 @@ def plot_data(freq_phase, output_file):
     top_ax.set_xlabel('Pulse Phase')
     top_ax.set_ylim([-0.3, 1])  # Set the y-axis limit for the top plot
     top_ax.set_xlim([0, 1])
+    top_ax.xaxis.set_visible(False)
     
     # Right plot (Frequency Strength)
     right_ax = fig.add_subplot(grid[1:, -1])
@@ -69,7 +70,8 @@ def plot_data(freq_phase, output_file):
     right_ax.plot(freq_strength, np.arange(num_channels))
     right_ax.set_xlabel('Power')
     right_ax.set_ylabel('Frequency (Channel)')
-    right_ax.set_xlim([-0.5, 1])
+    right_ax.set_xlim([-1, 1])
+    top_ax.yaxis.set_visible(False)
     
     plt.subplots_adjust(left=0.2, right=0.8, top=0.8, bottom=0.2)
     plt.show()
