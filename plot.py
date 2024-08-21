@@ -72,6 +72,8 @@ def plot_data(freq_phase, output_file):
     right_ax.set_ylabel('Frequency (Channel)')
     right_ax.set_xlim([-1, 1])
     top_ax.yaxis.set_visible(False)
+    right_ax.set_xticks([-0.5, 0, 0.5, 1])
+    right_ax.set_xticklabels(['-0.5', '0', '0.5', '1']) 
     
     plt.subplots_adjust(left=0.2, right=0.8, top=0.8, bottom=0.2)
     plt.show()
