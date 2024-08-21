@@ -60,7 +60,9 @@ def plot_data(freq_phase, output_file):
     top_ax.plot(phase, flux_phase)
     top_ax.set_ylabel('Flux Density')
     top_ax.set_xlabel('Pulse Phase')
-    top_ax.set_ylim([-0.5, 5])  # Set the y-axis limit for the top plot
+    max_flux = np.max(flux_phase)
+    y_max = max_flux + max_flux * 0.05
+    top_ax.set_ylim([-0.3, y_max])
     top_ax.set_xlim([0, 1])
     top_ax.xaxis.set_visible(False)
     
@@ -70,11 +72,16 @@ def plot_data(freq_phase, output_file):
     right_ax.plot(freq_strength, np.arange(num_channels))
     right_ax.set_xlabel('Power')
     right_ax.set_ylabel('Frequency (Channel)')
-    right_ax.set_xlim([-1, 1])
+    min_strength = np.min(freq_strength)
+    max_strength = np.max(freq_strength)
+    x_min = min_strength - abs(min_strength) * 0.02
+    x_max = max_strength + max_strength * 0.05
+    right_ax.set_xlim([x_min, x_max])
     top_ax.yaxis.set_visible(False)
     right_ax.set_xticks([-0.5, 0, 0.5, 1])
     right_ax.set_xticklabels(['-0.5', '0', '0.5', '1']) 
-    
+
+    # plot and save
     plt.subplots_adjust(left=0.2, right=0.8, top=0.8, bottom=0.2)
     plt.show()
     fig.savefig(output_file)
