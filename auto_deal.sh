@@ -100,6 +100,12 @@ for date_dir in $date_dirs; do
 
     echo "date directory created: $data_dir/$source_name/$date_dir/*.zst"
 
+    # unzip all zst files
+    for i in *.zst ; do
+    zstd -d "$i"
+    done
+    echo "all zst files unzip finished" 
+
     # define the combine output name
     output_pol0="${source_name}_${date_dir}_combine_pol0"
     output_pol1="${source_name}_${date_dir}_combine_pol1"
