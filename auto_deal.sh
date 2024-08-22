@@ -17,19 +17,19 @@ if [ $# -eq 0 ]; then
 fi
 
 # give the data directory
-data_dir='/data187/baseband_19beam/1004'
+data_dir='/data187'
 
 # give the target directory
-target_dir='/home/user02/cyj'
+target_dir='/home/cyj'
 
 # see the current directory
 current_dir=$(pwd)
 
 # the giant.psh path
-giant_file='/home/user02/cyj/giant.psh'
+giant_file='/home/cyj/giant.psh'
 
 # the source hdr path
-hdr_file='/home/user02/cyj/header.hdr'
+hdr_file='/home/cyj/header.hdr'
 
 # dspsr parameters
 dspsr_params="-t 4 -cpu 4 -s -J giant.psh -F 4096:D -K -e fits -a psrfits"
