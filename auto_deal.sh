@@ -42,6 +42,16 @@ if [ "$current_dir" != "$target_dir" ]; then
     }
 else
     echo "nothing to do, continue"
+    
+    # source the .bashrc in target_dir
+    if [ -f ./.bashrc ]; then
+        source ./.bashrc
+        echo ".bashrc loaded from $target_dir"
+    else
+        echo "No .bashrc file found in $target_dir"
+    fi
+else
+    echo "Already in the target directory: $current_dir"
 fi
 
 # parse the source name
