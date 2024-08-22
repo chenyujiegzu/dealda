@@ -48,10 +48,10 @@ else
         source ./.bashrc
         echo ".bashrc loaded from $target_dir"
     else
-        echo "No .bashrc file found in $target_dir"
+        echo "no .bashrc file found in $target_dir"
     fi
 else
-    echo "Already in the target directory: $current_dir"
+    echo "already in the target directory: $current_dir"
 fi
 
 # parse the source name
