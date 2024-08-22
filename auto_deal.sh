@@ -40,7 +40,6 @@ if [ "$current_dir" != "$target_dir" ]; then
         echo "$target_dir : error ! no such directory!"
         exit 1
     }
-else
     echo "nothing to do, continue"
     
     # source the .bashrc in target_dir
