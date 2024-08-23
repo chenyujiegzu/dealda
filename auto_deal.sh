@@ -100,6 +100,11 @@ for date_dir in $date_dirs; do
 
     echo "date directory created: $data_dir/$source_name/$date_dir/*.zst"
 
+    #remove all soft links of. zst files in the current dir
+    echo "remove all links of zst files..."
+    find . -maxdepth 1 -type l -name "*.zst" -exec rm -f {} +
+    echo "all zst file links have been removed..."
+    
     # unzip all zst files
     for i in *.zst ; do
     zstd -d "$i"
@@ -118,6 +123,25 @@ for date_dir in $date_dirs; do
     wait
 
     echo "the $output_pol0 and $output_pol1 has been completed "
+
+    #remove all dat files except the merged files
+    echo "remove all dat files except the merged files..."
+    find . -maxdepth 1 -type f -name "*.dat" ! -name "${output_pol0}.dat" ! -name "${output_pol1}.dat" -exec rm -f {}
+    echo "all dat files except the merged files have been removed..."
+
+    # tranform Mxx or NGCxxxx to Jxxxx+xxxx
+    convert_to_jname() {
+        case "$1" in
+            "M2") echo "J2133-0049" ;;
+            "M15") echo "B2127+11" ;;
+            "M12") echo "J1647-0156" ;;
+            "NGC6517") echo "J1801-0857" ;;
+            "NGC6712") echo "J1853-0842" ;;
+            "crab") echo "J0534+2200" ;;
+        esac
+    }
+    # use the Jxxxx+xxxx source name
+    source_name=$(convert_to_jname "$source_name")
     
     # generate ephemeris file
     psrcat -e "$source_name" > "${source_name}_${date_dir}.par"
