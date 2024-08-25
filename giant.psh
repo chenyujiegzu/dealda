@@ -1,0 +1,17 @@
+# disable log messages
+init verbose --
+
+# form a total intensity copy of the raw data
+push
+fscrunch
+pscrunch
+
+# reduce to 512 phase bins
+bscrunch 512
+
+# keep only profiles with a peak greater than ten sigma
+test $all:max > ( $off:avg + 10 * $off:rms )
+
+# restore the original file
+pop
+
