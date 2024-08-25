@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from datetime import datetime
 from args_parser import parse_args
 from light_travel_time_diff import calculate_light_travel_time
