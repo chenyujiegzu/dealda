@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import types
 import numpy as np 
 import pyfits
