@@ -25,7 +25,7 @@ def main():
 
     # sample rate and channels
     sample_rate = 1000000000  # 1000MSps (1 GHz)
-    nchan = 4096  # 通道数
+    nchan = 4096
 
     # file
     filename = args.file
