@@ -5,12 +5,18 @@ import re, sys
 import glob
 import presto.sifting as sifting
 from operator import itemgetter, attrgetter
+import argparse
 
 # Note:  You will almost certainly want to adjust
 #        the following variables for your particular search
 
 # glob for ACCEL files
-globaccel = "*ACCEL_*0"
+#globaccel = "*ACCEL_*0"
+parser = argparse.ArgumentParser()
+parser.add_argument("--cand", required=True, help="Input the cand files")
+args = parser.parse_args()
+globaccel = args.cand
+
 # glob for .inf files
 globinf = "*DM*.inf"
 # In how many DMs must a candidate be detected to be considered "good"
@@ -78,16 +84,20 @@ if len(cands):
 
 # Write candidates to STDOUT
 if len(cands):
-        cands.sort(key=attrgetter('sigma'), reverse=True)
+    cands.sort(key=attrgetter('sigma'), reverse=True)
+    with open("cands.txt", "w") as f:
         print("#id   dm acc  F0 F1 F2 S/N", file=sys.stderr)
-        for k,cand in enumerate(cands):
-                z0 = cand.z - 0.5 * cand.w
-                r0 = cand.r - 0.5 * z0 - cand.w / 6.
-                f = r0 / cand.T
-                fd = z0 / (cand.T * cand.T)
-                fdd = cand.w / (cand.T * cand.T * cand.T)
-                f0 = f + fd * (cand.T / 2.) + 0.5 * fdd * (cand.T / 2.)**2
-                f1 = fd + fdd * (cand.T / 2.)
-                f2 = fdd
-                print("%d\t%.3f\t%.15f\t%.15f\t%.15f\t%.15f\t%.2f" % (k+1, cand.DM, 0., f0, f1, f2, cand.snr), file=sys.stderr)
+        print("#id   dm acc  F0 F1 F2 S/N", file=f)
+        for k, cand in enumerate(cands):
+            z0 = cand.z - 0.5 * cand.w
+            r0 = cand.r - 0.5 * z0 - cand.w / 6.
+            f_ = r0 / cand.T
+            fd = z0 / (cand.T**2)
+            fdd = cand.w / (cand.T**3)
+            f0 = f_ + fd * (cand.T/2.) + 0.5 * fdd * (cand.T/2.)**2
+            f1 = fd + fdd * (cand.T/2.)
+            f2 = fdd
+            line = "%d\t%.3f\t%.15f\t%.15f\t%.15f\t%.15f\t%.2f" % (k+1, cand.DM, 0., f0, f1, f2, cand.snr)
+            print(line, file=sys.stderr)
+            print(line, file=f)
         #sifting.write_candlist(cands)
