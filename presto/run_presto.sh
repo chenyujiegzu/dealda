@@ -1,4 +1,5 @@
 # !/bin/bash
+#@Yujie Chen, gs.yujiechen23@gzu.edu.cn, 2025/12/15
 
 # Specify the directory containing the FITS files
 data_dir="/home/data/C1"
