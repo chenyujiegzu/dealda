@@ -33,8 +33,8 @@ thread="4"
 
 # template and sift path
 template="/home/software/PulsarX/include/template/fast_fold.template"
-sift_script="/home/software/PulsarX/python/pulsarx/ACCEL_sift_pulsarx.py"
-candfile="/home/software/PulsarX/include/template/cands.txt"
+sift_script="/mnt/f/data/pulsarX/ACCEL_sift_pulsarx.py"
+candfile="/mnt/f/data/pulsarX/cands.txt"
 
 # output commands files
 dedisp_commands="dedisperse.txt"
