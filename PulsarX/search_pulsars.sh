@@ -7,23 +7,34 @@ data_dir="/home/data/NGC6517"
 fits_pattern="NGC6517_tracking-M01_{0001..0800}.fits"
 
 # PulsarX dedispersion
-dms="180"
-ddm="0.01"
-ndm="1000"
+td="1"
+fd="2"
+zapthre="3"
+dms="182"
+ddm="0.1"
+ndm="2"
 dedisp_thread="4"
-zmax_value="20"
-numharm_value="32"
-wmax_value="8"
+zmax="20"
+numharm="32"
+wmax="8"
+Z_RFI="kadaneF 8 4 zdot"
+dedisp_format="presto"  # pulsarx, sigproc, presto
+Jname="J1801-0857"
+
 
 # fold paramters
+RA="18:01:50.52"
+DEC"-08:57:31.60"
 fold_thread="4"
-n_value="64"
-npart_value="128"
-thread="24"
+clfd="2"
+nsubband="64"
+nbin="128"
+thread="4"
 
 # template and sift path
 template="/home/software/PulsarX/include/template/fast_fold.template"
 sift_script="/home/software/PulsarX/python/pulsarx/ACCEL_sift_pulsarx.py"
+candfile="/home/software/PulsarX/include/template/cands.txt"
 
 # output commands files
 dedisp_commands="dedisperse.txt"
@@ -49,7 +60,7 @@ fold_commands="psrfold.txt"
 
 echo "Generating dedisperse_all_fil commands..."
 
-echo dedisperse_all_fil --dms "${dms}" --ddm "${ddm}" --ndm "${ndm}" -t "${dedisp_thread}" -z kadaneF 8 4 zdot --format presto --psrfits -f "${data_dir}/${fits_pattern}" >> "$dedisp_commands"
+echo dedisperse_all_fil --cont --td "${td}" --fd "${fd}" --zapthre "${zapthre}" --dms "${dms}" --ddm "${ddm}" --ndm "${ndm}" -t "${dedisp_thread}" -z "${Z_RFI}" --rootname "${Jname}" --format "${dedisp_format}" -f "${data_dir}/${fits_pattern}" >> "$dedisp_commands"
 
 echo "Running dedisperse_all_fil..."
 cat "$dedisp_commands" | tee -a dedisperse.log
@@ -80,7 +91,7 @@ echo "realfft finished."
 echo "Generating accelsearch commands..."
 
 ls *.fft | while read fftfile; do
-    echo accelsearch -zmax "${zmax_value}" -numharm "${numharm_value}" -wmax "${wmax_value}" "$fftfile" >> "$accel_commands"
+    echo accelsearch -zmax "${zmax}" -numharm "${numharm}" -wmax "${wmax}" "$fftfile" >> "$accel_commands"
 done
 
 echo "Running accelsearch in parallel..."
@@ -105,7 +116,7 @@ echo "Candidate sifting finished."
 
 echo "Generating psrfold_fil2 commands..."
 
-echo psrfold_fil2 -t "${fold_thread}" --template "${template}" -n "${n_value}" -b "${npart_value}" --clfd 2 --zapthre 3.0 -z kadaneF 8 4 zdot --candfile cands.txt --presto --psrfits "${data_dir}/${fits_pattern}" >> "$fold_commands"
+echo psrfold_fil2 -t "${fold_thread}" --nosearch --ra "${RA} --dec "${DEC} --template "${template}" --nsubband "${nsubband}" --nbin "${nbin}" --clfd "${clfd}" --zapthre "${zapthre}" -z "${Z_RFI}" --candfile "${candfile}" --presto --psrfits "${data_dir}/${fits_pattern}" >> "$fold_commands"
 
 echo "Running psrfold_fil2..."
 cat "$fold_commands" | tee -a psrfold.log
