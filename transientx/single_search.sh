@@ -1,5 +1,7 @@
 #!/bin/bash
 
+#@Yujie Chen, gs.yujiechen23@gzu.edu.cn, 2025/12/15
+
 DATA_DIR="/home/data4/PT2025_0005/NGC4147/"
 DATE_LIST=("20250814")
 OUT_CMD="commands.txt"
