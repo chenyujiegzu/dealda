@@ -35,6 +35,7 @@ thread="4"
 # template and sift path
 template="/home/software/PulsarX/include/template/fast_fold.template"
 sift_script="/mnt/f/data/pulsarX/ACCEL_sift_pulsarx.py"
+cand="*ACCEL_${zmax}*
 candfile="/mnt/f/data/pulsarX/cands.txt"
 
 # output commands files
@@ -61,7 +62,7 @@ fold_commands="psrfold.txt"
 
 echo "Generating dedisperse_all_fil commands..."
 
-echo dedisperse_all_fil --cont --td "${td}" --fd "${fd}" --zapthre "${zapthre}" --dms "${dms}" --ddm "${ddm}" --ndm "${ndm}" -t "${dedisp_thread}" -z "${Z_RFI}" --rootname "${Jname}" --format "${dedisp_format}" -f "${data_dir}/${fits_pattern}" >> "$dedisp_commands"
+echo dedisperse_all_fil --cont --td "${td}" --fd "${fd}" --zapthre "${zapthre}" --dms "${dms}" --ddm "${ddm}" --ndm "${ndm}" -t "${dedisp_thread}" -z "${Z_RFI}" --rootname "${Jname}" --format "${dedisp_format}" --psrfits -f "${data_dir}/${fits_pattern}" >> "$dedisp_commands"
 
 echo "Running dedisperse_all_fil..."
 cat "$dedisp_commands" | tee -a dedisperse.log
@@ -106,7 +107,7 @@ echo "accelsearch finished."
 ########################
 
 echo "Running PulsarX ACCEL sift..."
-python "${sift_script}" | tee -a sift.log
+python "${sift_script}" --cand "${cand}" | tee -a sift.log
 
 wait
 echo "Candidate sifting finished."
