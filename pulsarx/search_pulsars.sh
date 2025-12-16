@@ -25,7 +25,7 @@ Jname="J1801-0857"
 # fold paramters
 srcname="J1801-0857"
 RA="18:01:50.52"
-DEC"-08:57:31.60"
+DEC="-08:57:31.60"
 fold_thread="4"
 clfd="2"
 nsubband="64"
@@ -65,7 +65,7 @@ echo "Generating dedisperse_all_fil commands..."
 echo dedisperse_all_fil --cont --td "${td}" --fd "${fd}" --zapthre "${zapthre}" --dms "${dms}" --ddm "${ddm}" --ndm "${ndm}" -t "${dedisp_thread}" -z "${Z_RFI}" --rootname "${Jname}" --format "${dedisp_format}" --psrfits -f "${data_dir}/${fits_pattern}" >> "$dedisp_commands"
 
 echo "Running dedisperse_all_fil..."
-cat "$dedisp_commands" | tee -a dedisperse.log
+cat "$dedisp_commands" | parallel -j "${thread}" | tee -a dedisperse.log
 
 wait
 echo "Dedispersion finished."
