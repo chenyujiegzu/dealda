@@ -1,73 +1,99 @@
 #!/bin/bash
+# @Yujie Chen, gs.yujiechen23@gzu.edu.cn, 2025/12/15
+# transientx + replot_fil with parallel
 
-#@Yujie Chen, gs.yujiechen23@gzu.edu.cn, 2025/12/15
+# Data path
+data_dir="/home/data4/PT2025_0005/NGC4147"
+dates=("20250814")
+fits_pattern="*.fits"
 
-DATA_DIR="/home/data4/PT2025_0005/NGC4147/"
-DATE_LIST=("20250814")
-OUT_CMD="commands.txt"
+# transientx parameters
+tx_thread="4"
+zapthre="3.0"
+dms="10"
+ddm="0.1"
+ndm="500"
+thre="7"
+minw="0.0005"
+maxw="0.5"
+lval="0.5"
+Z_RFI="kadaneF 8 4 zdot"
 
-> "$OUT_CMD"
+# replot parameters
+srcname="NGC4147"
+RA="12:10:06.15"
+DEC="+18:32:31.8"
+telescope="FAST"
+dmcutoff="0.01"
+widthcutoff="0.01"
+snrcutoff="7"
+snrloss="0.1"
+kadane="8 4 7"
+thread="4"
 
-echo "Generating commands into $OUT_CMD ..."
+# output command files
+transientx_commands="transientx.txt"
+replot_commands="replot.txt"
 
-for DATE in "${DATE_LIST[@]}"; do
+> "$transientx_commands"
+> "$replot_commands"
 
-    # mkdir datedir
-    mkdir -p "${DATE}"
-    chmod 777 "${DATE}"
+> transientx.log
+> replot.log
 
-    # ================================
-    # transientx_fil commands
-    # ================================
-    echo "" >> "$OUT_CMD"
+##############################
+# Step 1: transientx_fil
+##############################
 
-    echo "transientx_fil -v -o ${DATE}/${DATE}_NGC4147 -t 4 --zapthre 3.0 --dms 10 --ddm 0.1 --ndm 500 --thre 7 --minw 0.0005 --maxw 0.5 -l 0.5 --drop -z kadaneF 8 4 zdot --psrfits $DATA_DIR/$DATE/*.fits" >> "$OUT_CMD"
+echo "Generating transientx_fil commands..."
 
+for day in "${dates[@]}"; do
 
-    # ================================
-    # replot_fil commands
-    # ================================
-    echo "" >> "$OUT_CMD"
+    mkdir -p "${day}"
+    chmod 777 "${day}"
 
-    echo "replot_fil -v -t 4 --zapthre 3.0 --srcname NGC4147 --ra 12:10:06.15 --dec +18:32:31.8 --telescope FAST --dmcutoff 0.01 --widthcutoff 0.01 --snrcutoff 7 --snrloss 0.1 --zap --zdot --kadane 8 4 7 --candfile ${DATE}/${DATE}*.cands --clean --psrfits $DATA_DIR/$DATE/*.fits" >> "$OUT_CMD"
-
-    echo "" >> "$OUT_CMD"
+    echo transientx_fil -v -o "${day}/${day}_NGC4147" -t "${tx_thread}" --zapthre "${zapthre}" --dms "${dms}" --ddm "${ddm}" --ndm "${ndm}" --thre "${thre}" --minw "${minw}" --maxw "${maxw}" -l "${lval}" --drop -z "${Z_RFI}" --psrfits "${data_dir}/${day}/${fits_pattern}" >> "$transientx_commands"
+    
 done
 
-echo "Done! All commands have been written to $OUT_CMD"
-
-chmod 777 "$OUT_CMD"
-
-
-# ============================================
-# create run_commands.sh
-# ============================================
-cat > run_commands.sh << 'EOF'
-#!/bin/bash
-
-CMD_FILE="commands.txt"
-
-echo "==============================="
-echo " Running transientx_fil jobs..."
-echo "==============================="
-
-grep "^transientx_fil" "$CMD_FILE" | parallel -j 4
-
-echo "All transientx_fil jobs completed!"
-echo
+echo "Running transientx_fil..."
+cat "$tx_commands" | parallel -j "${thread}" | tee -a transientx.log
 
 wait
+echo "transientx_fil finished."
 
-echo "==============================="
-echo " Running replot_fil jobs..."
-echo "==============================="
+##############################
+# Step 2: replot_fil
+##############################
 
-grep "^replot_fil" "$CMD_FILE" | parallel -j 4
+echo "Generating replot_fil commands..."
 
-echo "All replot_fil jobs completed!"
-echo "==============================="
-echo " All processing done!"
-echo "==============================="
-EOF
+for day in "${dates[@]}"; do
 
-chmod 777 run_commands.sh
+    echo replot_fil -v \
+        -t "${tx_thread}" \
+        --zapthre "${zapthre}" \
+        --srcname "${srcname}" \
+        --ra "${RA}" --dec "${DEC}" \
+        --telescope "${telescope}" \
+        --dmcutoff "${dmcutoff}" \
+        --widthcutoff "${widthcutoff}" \
+        --snrcutoff "${snrcutoff}" \
+        --snrloss "${snrloss}" \
+        --zap --zdot \
+        --kadane ${kadane} \
+        --candfile "${day}/${day}*.cands" \
+        --clean \
+        --psrfits "${data_dir}/${day}/${fits_pattern}" \
+        >> "$replot_commands"
+
+done
+
+echo "Running replot_fil..."
+cat "$replot_commands" | parallel -j "${thread}" | tee -a replot.log
+
+wait
+echo "replot_fil finished."
+
+echo "All commands completed."
+
