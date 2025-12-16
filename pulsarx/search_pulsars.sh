@@ -34,7 +34,7 @@ template="/home/software/PulsarX/include/template/fast_fold.template"
 sift_script="/mnt/f/data/pulsarX/ACCEL_sift_pulsarx.py"
 ACCEL_value=$(( ((zmax + 19) / 20) * 20 ))
 JERK_value=$(( ((wmax + 19) / 20) * 20 ))
-cand="*ACCEL_${zmax}_JERK_${JERK_value}"
+cand="*ACCEL_${ACCEL_value}_JERK_${JERK_value}"
 candfile="./cands.txt"
 
 # output commands files
