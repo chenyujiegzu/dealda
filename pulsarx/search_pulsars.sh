@@ -16,13 +16,10 @@ ndm="2"
 dedisp_thread="4"
 zmax="20"
 numharm="32"
-wmax="8"
+wmax="20"  # wmax: an integer multiple of 20, such as 20, 40, 60.
 Z_RFI="kadaneF 8 4 zdot"
 dedisp_format="presto"  # pulsarx, sigproc, presto
 Jname="J1801-0857"
-
-
-# fold paramters
 srcname="J1801-0857"
 RA="18:01:50.52"
 DEC="-08:57:31.60"
@@ -34,7 +31,7 @@ thread="4"
 
 # template and sift path
 template="/home/software/PulsarX/include/template/fast_fold.template"
-sift_script="/home/software/PulsarX/python/pulsarx/ACCEL_sift_pulsarx.py"
+sift_script="/mnt/f/data/pulsarX/ACCEL_sift_pulsarx.py"
 ACCEL_value=$(( ((zmax + 19) / 20) * 20 ))
 JERK_value=$(( ((wmax + 19) / 20) * 20 ))
 cand="*ACCEL_${zmax}_JERK_${JERK_value}"
