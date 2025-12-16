@@ -5,7 +5,7 @@
 # Data path
 data_dir="/home/data/NGC6517"
 dates=("20241222" "20250220")
-fits_pattern="NGC6517_tracking-M01_{0001..0800}.fits"
+fits_pattern="NGC6517_tracking-M01_*.fits"
 
 # PulsarX dedispersion
 td="1"
