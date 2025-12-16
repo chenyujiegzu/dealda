@@ -35,8 +35,10 @@ thread="4"
 # template and sift path
 template="/home/software/PulsarX/include/template/fast_fold.template"
 sift_script="/home/software/PulsarX/python/pulsarx/ACCEL_sift_pulsarx.py"
-cand="*ACCEL_${zmax}_JERK_${wmax}"
-candfile="/mnt/f/data/pulsarX/cands.txt"
+ACCEL_value=$(( ((zmax + 19) / 20) * 20 ))
+JERK_value=$(( ((wmax + 19) / 20) * 20 ))
+cand="*ACCEL_${zmax}_JERK_${JERK_value}"
+candfile="./cands.txt"
 
 # output commands files
 dedisp_commands="dedisperse.txt"
@@ -121,7 +123,7 @@ echo "Generating psrfold_fil2 commands..."
 echo psrfold_fil2 -t "${fold_thread}" --srcname "${srcname}" --ra "${RA} --dec "${DEC} --template "${template}" --nsubband "${nsubband}" --nbin "${nbin}" --clfd "${clfd}" --zapthre "${zapthre}" -z "${Z_RFI}" --candfile "${candfile}" --presto --psrfits "${data_dir}/${fits_pattern}" >> "$fold_commands"
 
 echo "Running psrfold_fil2..."
-cat "$fold_commands" | tee -a psrfold.log
+cat "$fold_commands" | parallel -j "${thread}" | tee -a psrfold.log
 
 wait
 echo "psrfold finished."
