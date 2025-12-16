@@ -3,7 +3,7 @@
  *
  *  Created on: May 4, 2020
  *      Author: ypmen
- * Fold image background from black to white. 
+ * Fold image background from black to white. @Yujie Chen, gs.yujiechen23@gzu.edu.cn, 2025/12/15
  */
 
 #include <fstream>
