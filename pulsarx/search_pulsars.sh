@@ -23,6 +23,7 @@ Jname="J1801-0857"
 
 
 # fold paramters
+srcname="J1801-0857"
 RA="18:01:50.52"
 DEC"-08:57:31.60"
 fold_thread="4"
@@ -116,7 +117,7 @@ echo "Candidate sifting finished."
 
 echo "Generating psrfold_fil2 commands..."
 
-echo psrfold_fil2 -t "${fold_thread}" --nosearch --ra "${RA} --dec "${DEC} --template "${template}" --nsubband "${nsubband}" --nbin "${nbin}" --clfd "${clfd}" --zapthre "${zapthre}" -z "${Z_RFI}" --candfile "${candfile}" --presto --psrfits "${data_dir}/${fits_pattern}" >> "$fold_commands"
+echo psrfold_fil2 -t "${fold_thread}" --nosearch --srcname "${srcname}" --ra "${RA} --dec "${DEC} --template "${template}" --nsubband "${nsubband}" --nbin "${nbin}" --clfd "${clfd}" --zapthre "${zapthre}" -z "${Z_RFI}" --candfile "${candfile}" --presto --psrfits "${data_dir}/${fits_pattern}" >> "$fold_commands"
 
 echo "Running psrfold_fil2..."
 cat "$fold_commands" | tee -a psrfold.log
