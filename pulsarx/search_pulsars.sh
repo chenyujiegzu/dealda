@@ -125,4 +125,4 @@ cat "$fold_commands" | parallel -j "${thread}" | tee -a psrfold.log
 wait
 echo "psrfold finished."
 
-echo "PulsarX + Presto completed."
+echo "All commands completed."
