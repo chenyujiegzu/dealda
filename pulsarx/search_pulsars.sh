@@ -34,8 +34,8 @@ thread="4"
 
 # template and sift path
 template="/home/software/PulsarX/include/template/fast_fold.template"
-sift_script="/mnt/f/data/pulsarX/ACCEL_sift_pulsarx.py"
-cand="*ACCEL_${zmax}*
+sift_script="/home/software/PulsarX/python/pulsarx/ACCEL_sift_pulsarx.py"
+cand="*ACCEL_${zmax}_JERK_${wmax}"
 candfile="/mnt/f/data/pulsarX/cands.txt"
 
 # output commands files
