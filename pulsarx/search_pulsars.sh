@@ -62,7 +62,7 @@ fold_commands="psrfold.txt"
 
 echo "Generating dedisperse_all_fil commands..."
 for day in "${dates[@]}"; do 
-echo dedisperse_all_fil --cont --td "${td}" --fd "${fd}" --zapthre "${zapthre}" --dms "${dms}" --ddm "${ddm}" --ndm "${ndm}" -t "${dedisp_thread}" -z "${Z_RFI}" --rootname "${Jname}" --format "${dedisp_format}" --psrfits -f "${data_dir}/${day}/${fits_pattern}" >> "$dedisp_commands"
+    echo dedisperse_all_fil --cont --td "${td}" --fd "${fd}" --zapthre "${zapthre}" --dms "${dms}" --ddm "${ddm}" --ndm "${ndm}" -t "${dedisp_thread}" -z "${Z_RFI}" --rootname "${Jname}" --format "${dedisp_format}" --psrfits -f "${data_dir}/${day}/${fits_pattern}" >> "$dedisp_commands"
 done
 
 echo "Running dedisperse_all_fil..."
@@ -118,8 +118,8 @@ echo "Candidate sifting finished."
 ########################
 
 echo "Generating psrfold_fil2 commands..."
-for day in "${dates[@]}"; do 
-echo psrfold_fil2 -t "${fold_thread}" --srcname "${srcname}" --ra "${RA}" --dec "${DEC}" --template "${template}" --nsubband "${nsubband}" --nbin "${nbin}" --clfd "${clfd}" --zapthre "${zapthre}" -z "${Z_RFI}" --candfile "${candfile}" --presto --psrfits "${data_dir}/${day}/${fits_pattern}" >> "$fold_commands"
+for day in "${dates[@]}"; do
+    echo psrfold_fil2 -t "${fold_thread}" --srcname "${srcname}" --ra "${RA}" --dec "${DEC}" --template "${template}" --nsubband "${nsubband}" --nbin "${nbin}" --clfd "${clfd}" --zapthre "${zapthre}" -z "${Z_RFI}" --candfile "${candfile}" --presto --psrfits "${data_dir}/${day}/${fits_pattern}" >> "$fold_commands"
 done
 
 echo "Running psrfold_fil2..."
