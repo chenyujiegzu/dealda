@@ -8,7 +8,7 @@ dates=("20250814")
 fits_pattern="*.fits"
 
 # transientx parameters
-tx_thread="4"
+thread="4"
 zapthre="3.0"
 dms="10"
 ddm="0.1"
@@ -29,7 +29,6 @@ widthcutoff="0.01"
 snrcutoff="7"
 snrloss="0.1"
 kadane="8 4 7"
-thread="4"
 
 # output command files
 transientx_commands="transientx.txt"
@@ -52,12 +51,11 @@ for day in "${dates[@]}"; do
     mkdir -p "${day}"
     chmod 777 "${day}"
 
-    echo transientx_fil -v -o "${day}/${day}_NGC4147" -t "${tx_thread}" --zapthre "${zapthre}" --dms "${dms}" --ddm "${ddm}" --ndm "${ndm}" --thre "${thre}" --minw "${minw}" --maxw "${maxw}" -l "${lval}" --drop -z "${Z_RFI}" --psrfits "${data_dir}/${day}/${fits_pattern}" >> "$transientx_commands"
-    
+    echo transientx_fil -v -o "${day}/${day}_NGC4147" -t "${thread}" --zapthre "${zapthre}" --dms "${dms}" --ddm "${ddm}" --ndm "${ndm}" --thre "${thre}" --minw "${minw}" --maxw "${maxw}" -l "${lval}" --drop -z "${Z_RFI}" --psrfits "${data_dir}/${day}/${fits_pattern}" >> "$transientx_commands"
 done
 
 echo "Running transientx_fil..."
-cat "$tx_commands" | parallel -j "${thread}" | tee -a transientx.log
+cat "$transientx_commands" | parallel -j "${thread}" | tee -a transientx.log
 
 wait
 echo "transientx_fil finished."
@@ -69,24 +67,7 @@ echo "transientx_fil finished."
 echo "Generating replot_fil commands..."
 
 for day in "${dates[@]}"; do
-
-    echo replot_fil -v \
-        -t "${tx_thread}" \
-        --zapthre "${zapthre}" \
-        --srcname "${srcname}" \
-        --ra "${RA}" --dec "${DEC}" \
-        --telescope "${telescope}" \
-        --dmcutoff "${dmcutoff}" \
-        --widthcutoff "${widthcutoff}" \
-        --snrcutoff "${snrcutoff}" \
-        --snrloss "${snrloss}" \
-        --zap --zdot \
-        --kadane ${kadane} \
-        --candfile "${day}/${day}*.cands" \
-        --clean \
-        --psrfits "${data_dir}/${day}/${fits_pattern}" \
-        >> "$replot_commands"
-
+    echo replot_fil -v -t "${thread}" --zapthre "${zapthre}" --srcname "${srcname}" --ra "${RA}" --dec "${DEC}" --telescope "${telescope}" --dmcutoff "${dmcutoff}" --widthcutoff "${widthcutoff}" --snrcutoff "${snrcutoff}" --snrloss "${snrloss}" --zap --zdot --kadane ${kadane} --candfile "${day}/${day}*.cands" --clean --psrfits "${data_dir}/${day}/${fits_pattern}" >> "$replot_commands"
 done
 
 echo "Running replot_fil..."
