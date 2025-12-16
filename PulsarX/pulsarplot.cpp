@@ -4,6 +4,7 @@
  * @create date 2020-06-14 15:59:59
  * @modify date 2020-06-14 15:59:59
  * @desc [description]
+ * Fold image background from black to white. @Yujie Chen, gs.yujiechen23@gzu.edu.cn, 2025/12/15
  */
 
 #include <fstream>
