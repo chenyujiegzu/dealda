@@ -16,7 +16,7 @@ ndm="500"
 thre="7"
 minw="0.0005"
 maxw="0.5"
-lval="0.5"
+length_time="0.5"
 Z_RFI="kadaneF 8 4 zdot"
 
 # replot parameters
@@ -51,7 +51,7 @@ for day in "${dates[@]}"; do
     mkdir -p "${day}"
     chmod 777 "${day}"
 
-    echo transientx_fil -v -o "${day}/${srcname}" -t "${thread}" --zapthre "${zapthre}" --dms "${dms}" --ddm "${ddm}" --ndm "${ndm}" --thre "${thre}" --minw "${minw}" --maxw "${maxw}" -l "${lval}" --drop -z "${Z_RFI}" --psrfits "${data_dir}/${day}/${fits_pattern}" >> "$transientx_commands"
+    echo transientx_fil -v -o "${day}/${srcname}" -t "${thread}" --zapthre "${zapthre}" --dms "${dms}" --ddm "${ddm}" --ndm "${ndm}" --thre "${thre}" --minw "${minw}" --maxw "${maxw}" -l "${length_time}" --drop -z "${Z_RFI}" --psrfits "${data_dir}/${day}/${fits_pattern}" >> "$transientx_commands"
 done
 
 echo "Running transientx_fil..."
