@@ -117,7 +117,7 @@ echo "Candidate sifting finished."
 
 echo "Generating psrfold_fil2 commands..."
 
-echo psrfold_fil2 -t "${fold_thread}" --nosearch --srcname "${srcname}" --ra "${RA} --dec "${DEC} --template "${template}" --nsubband "${nsubband}" --nbin "${nbin}" --clfd "${clfd}" --zapthre "${zapthre}" -z "${Z_RFI}" --candfile "${candfile}" --presto --psrfits "${data_dir}/${fits_pattern}" >> "$fold_commands"
+echo psrfold_fil2 -t "${fold_thread}" --srcname "${srcname}" --ra "${RA} --dec "${DEC} --template "${template}" --nsubband "${nsubband}" --nbin "${nbin}" --clfd "${clfd}" --zapthre "${zapthre}" -z "${Z_RFI}" --candfile "${candfile}" --presto --psrfits "${data_dir}/${fits_pattern}" >> "$fold_commands"
 
 echo "Running psrfold_fil2..."
 cat "$fold_commands" | tee -a psrfold.log
