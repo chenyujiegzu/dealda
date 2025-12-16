@@ -4,7 +4,7 @@
 
 # Data path
 data_dir="/home/data4/PT2025_0005/NGC4147"
-dates=("20250814")
+dates=("20241222" 20250220")
 fits_pattern="*.fits"
 
 # transientx parameters
@@ -51,7 +51,7 @@ for day in "${dates[@]}"; do
     mkdir -p "${day}"
     chmod 777 "${day}"
 
-    echo transientx_fil -v -o "${day}/${srcname{" -t "${thread}" --zapthre "${zapthre}" --dms "${dms}" --ddm "${ddm}" --ndm "${ndm}" --thre "${thre}" --minw "${minw}" --maxw "${maxw}" -l "${lval}" --drop -z "${Z_RFI}" --psrfits "${data_dir}/${day}/${fits_pattern}" >> "$transientx_commands"
+    echo transientx_fil -v -o "${day}/${srcname}" -t "${thread}" --zapthre "${zapthre}" --dms "${dms}" --ddm "${ddm}" --ndm "${ndm}" --thre "${thre}" --minw "${minw}" --maxw "${maxw}" -l "${lval}" --drop -z "${Z_RFI}" --psrfits "${data_dir}/${day}/${fits_pattern}" >> "$transientx_commands"
 done
 
 echo "Running transientx_fil..."
@@ -67,7 +67,7 @@ echo "transientx_fil finished."
 echo "Generating replot_fil commands..."
 
 for day in "${dates[@]}"; do
-    echo replot_fil -v -t "${thread}" --zapthre "${zapthre}" --srcname "${srcname}" --ra "${RA}" --dec "${DEC}" --telescope "${telescope}" --dmcutoff "${dmcutoff}" --widthcutoff "${widthcutoff}" --snrcutoff "${snrcutoff}" --snrloss "${snrloss}" --zap --zdot --kadane ${kadane} --candfile "${day}/*.cands" --clean --psrfits "${data_dir}/${day}/${fits_pattern}" >> "$replot_commands"
+    echo replot_fil -t "${thread}" --zapthre "${zapthre}" --srcname "${srcname}" --ra "${RA}" --dec "${DEC}" --telescope "${telescope}" --dmcutoff "${dmcutoff}" --widthcutoff "${widthcutoff}" --snrcutoff "${snrcutoff}" --snrloss "${snrloss}" --zap --zdot --kadane ${kadane} --candfile "${day}/*.cands" --clean --psrfits "${data_dir}/${day}/${fits_pattern}" >> "$replot_commands"
 done
 
 echo "Running replot_fil..."
