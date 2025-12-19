@@ -36,11 +36,6 @@ done
 # Wait for all background processes to complete 
 wait                                                                                                                                                                                          echo "The dspsr.txt have generated." 
 
-# cat the -K with 20231006
-#echo "Removing -K option and change npol to 2 for the dspsr command for date 20231006..."
-#sed -i '/20231006/s/ -K//g' dspsr.txt
-#sed -i '/20231006/s/ -d [0-9]\+/ -d 2/' dspsr.txt
-
 # Run rfifind commands in parallel
 echo "Running dspsr commands in parallel..."
 cat "$dspsr_commands" | parallel -j "${parallel}" | tee -a dspsr.log
