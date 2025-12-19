@@ -4,15 +4,15 @@
 
 # Data path
 data_dir="/home/data4/PT2025_0005/NGC4147"
-dates=("20241222" 20250220")
+dates=("20241222" "20250220")
 fits_pattern="*.fits"
 
 # transientx parameters
 thread="4"
 zapthre="3.0"
 dms="10"
-ddm="0.1"
-ndm="500"
+ddm="0.5"
+ndm="100"
 thre="7"
 minw="0.0005"
 maxw="0.5"
