@@ -4,6 +4,7 @@
 
 # Specify the directory containing the FITS files
 data_dir="/home/data/C1"
+dates=("20241222" "20250220")
 name="c1"
 thread="1"
 parfile="J2338+4818_tdb.par"
@@ -20,17 +21,11 @@ dspsr_commands="dspsr.txt"
 > "$dspsr_commands"
 > dspsr.log
 
-# Initialize an array to store dates
-dates=()
-
 # Loop through all date directories
-for date in $(ls $data_dir | grep '^[0-9]\{8\}$'); do
+for day in $dates; do
     
     # Run the rfifind command
     echo dspsr -cont -t "${thread}" -E "${parfile}" -F "${nchan}" -b "${nbin}" -K -L "${nsub}" -A -d "${npol}" -O "${name}_${date}" "$data_dir/$date/*.fits" >> "$dspsr_commands"
-
-    # Store the date for later use in prepdata command
-    dates+=("$date")
 done
 
 # Wait for all background processes to complete 
