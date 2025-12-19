@@ -6,6 +6,8 @@
 data_dir="/home/data/C1"
 dates=("20241222" "20250220")
 fits_pattern="NGC6517_tracking-M01_*.fits"
+
+# dspsr paramters
 minX_MB="1024"
 PSRname="c1"
 thread="1"
@@ -15,6 +17,8 @@ npol="4"
 nbin="128"
 nsub="20"
 parallel="2"
+
+# Output commands
 dspsr_commands="dspsr.txt"
 
 > "$dspsr_commands"
