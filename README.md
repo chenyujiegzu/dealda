@@ -19,7 +19,7 @@ transform_epoch.py: Contains functions to compute angles and parameters for nuta
 utils.py: Utility functions such as downloading and parsing IERS data, converting coordinates, etc.  
 
 ## Installation  
-git clone https://github.com/cyj-hue/coordtf.git   
+git clone https://github.com/Yu-Jie-Chen/dealda.git   
 cd /path/coordrf   
 pip install numpy  
 
