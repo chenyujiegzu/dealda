@@ -9,15 +9,16 @@ podman pull registry.cn-hangzhou.aliyuncs.com/pulsars/ubuntu22.04:latest  # upda
 # Verify the images exist ( use sudo!)
 [chenyujie@localhost cyj]$ sudo podman images
 REPOSITORY                                              TAG     IMAGE ID       CREATED        SIZE
-registry.cn-hangzhou.aliyuncs.com/pulsars/ubuntu22.04   v8.28   026e8dc2e432   45 hours ago   16.9 GB
+registry.cn-hangzhou.aliyuncs.com/pulsars/ubuntu22.04   latest   026e8dc2e432   45 hours ago   16.9 GB
 
 # created the container by the images (use sudo!) -v 后接 挂载目录路径：容器内挂载目录路径
-[chenyujie@localhost cyj]$ sudo podman run -it -v /home/data:/home/data --privileged --name pulsars 026e8dc2e432
+[chenyujie@localhost cyj]$ sudo podman run -it -v /home/data:/home/data --privileged --name pulsars images_id
 
 # mount the catalogue and enter the container (use sudo!)
 [chenyujie@localhost cyj]$ sudo podman exec -it -u chenyujie pulsars /bin/bash
 
 #sudo/su
  passwd (in chenyujie): cyj1001
+
 
 # 容器中的命令都是在用户chenyujie下创建的，进入容器需要source /home/chenyujie/.bashrc或者cp /home/chenyujie/.bashrc到自己主目录下即可。
