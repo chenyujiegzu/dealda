@@ -29,6 +29,7 @@ widthcutoff="0.01"
 snrcutoff="7"
 snrloss="0.1"
 kadane="8 4 7"
+template="/home/software/PulsarX/include/template/fast_fold.template"
 
 # output command files
 transientx_commands="transientx.txt"
@@ -67,7 +68,7 @@ echo "transientx_fil finished."
 echo "Generating replot_fil commands..."
 
 for day in "${dates[@]}"; do
-    echo replot_fil -t "${thread}" --zapthre "${zapthre}" --srcname "${srcname}" --ra "${RA}" --dec "${DEC}" --telescope "${telescope}" --dmcutoff "${dmcutoff}" --widthcutoff "${widthcutoff}" --snrcutoff "${snrcutoff}" --snrloss "${snrloss}" --zap --zdot --kadane ${kadane} --candfile "${day}/*.cands" --clean --psrfits "${data_dir}/${day}/${fits_pattern}" >> "$replot_commands"
+    echo replot_fil -t "${thread}" --zapthre "${zapthre}" --srcname "${srcname}" --ra "${RA}" --dec "${DEC}" --telescope "${telescope}" --dmcutoff "${dmcutoff}" --widthcutoff "${widthcutoff}" --snrcutoff "${snrcutoff}" --snrloss "${snrloss}" --zap --zdot --kadane ${kadane} --candfile "${day}/*.cands" --template "${template}" --arch --clean --psrfits "${data_dir}/${day}/${fits_pattern}" >> "$replot_commands"
 done
 
 echo "Running replot_fil..."
