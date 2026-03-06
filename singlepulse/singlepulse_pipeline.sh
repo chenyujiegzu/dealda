@@ -1,5 +1,5 @@
 #!/bin/bash
-#@Yujie Chen, gs.yujiechen23@gzu.edu.cn, 2026/2/4
+#@Yujie Chen, gs.yujiechen23@gzu.edu.cn, 2026/3/6
 
 set -e
 
@@ -60,7 +60,7 @@ process_one_day () {
 
     # ---------- dspsr ----------
     echo "[$day] Running dspsr..."
-    dspsr -cont -U "${minX_MB}" -t "${thread}" -S "${start_time}" \
+    prlimit -n4096 dspsr -cont -U "${minX_MB}" -t "${thread}" -S "${start_time}" \
           -fname "${fname}" -E "${parfile}" -F "${nchan}" \
           -b "${nbin}" -K -nsub "${nsub}" -s -d "${npol}" \
           -O "${PSRname}_${day}" *.fits
